@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+    before_action :logged_in_user, only:[:edit, :update]
+
   def show # 追加
    @user = User.find(params[:id])
   end
@@ -19,11 +21,17 @@ class UsersController < ApplicationController
   
   
   def edit
-  @user = User.find(params[:id])
+    @user = User.find(params[:id])
+    if (current_user != @user)
+        redirect_to root_path
+    end
   end
  
   def update
     @user = User.find(params[:id])
+    if (current_user != @user)
+        redirect_to root_path
+    end
    if @user.update(user_params)
      # 保存に成功した場合はトップページへリダイレクト
      redirect_to root_path , notice: 'プロフィール情報を更新しました。'
