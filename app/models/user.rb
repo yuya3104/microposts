@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  mount_uploader :avatar, AvatarUploader
+
   before_save { self.email = self.email.downcase }
   validates :name, presence: true, length: { maximum: 50 }
   validates :area, presence: true, length: {maximum: 20}, on: :update
@@ -44,4 +46,5 @@ class User < ActiveRecord::Base
   def feed_items
     Micropost.where(user_id: following_user_ids + [self.id])
   end
+  
 end
